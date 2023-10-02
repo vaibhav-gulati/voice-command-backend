@@ -28,13 +28,27 @@ const validColors = [
 ];
 
 
+let currentTheme = 'light';
+
 function parseVoiceCommand(audio) {
   try {
     const words = audio.toLowerCase().split(' ');
     const color = words.find(word => validColors.includes(word));
+    if (words.includes('clear') && words.includes('the') && words.includes('ui')) {
+      return 'clearUI()';
+    }
+    
     if (color) {
-      return `addBox("${color}")`;
-    } else {
+      if (words.includes('remove')) {
+        return `removeBox("${color}")`;
+      } else {
+        return `addBox("${color}")`;
+      }
+    }
+    else if (audio.toLowerCase().includes('toggle theme')) {
+      return 'toggleTheme()'
+    }
+       else {
       return 'unrecognizedCommand()';
     }
   } catch (error) {
